@@ -33,8 +33,10 @@
 #    endif  // _WIN32
 #  endif    // FMT_USE_FCNTL
 
-#  ifdef _WIN32
+#  if defined(_WIN32) && !defined(_XBOX)
 #    include <windows.h>
+#  else
+#    include <XTL.h>
 #  endif
 #endif
 
@@ -79,7 +81,7 @@ inline auto convert_rwcount(size_t count) -> size_t { return count; }
 
 FMT_BEGIN_NAMESPACE
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_XBOX)
 namespace detail {
 
 class system_message {
@@ -354,7 +356,7 @@ pipe::pipe() {
   write_end = file(fds[1]);
 }
 
-#  if !defined(__MSDOS__)
+#  if !defined(__MSDOS__) && !defined(_XBOX)
 auto getpagesize() -> long {
 #    ifdef _WIN32
   SYSTEM_INFO si;
